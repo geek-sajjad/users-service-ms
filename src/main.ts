@@ -2,21 +2,22 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 import * as Sentry from '@sentry/node';
-import { ResponseInterceptor } from './utils/interceptor/response.interceptor';
 import { ConfigService } from '@nestjs/config';
 
-import {
-  FastifyAdapter,
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify';
 import { ValidationPipe } from '@nestjs/common';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestFastifyApplication>(
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     AppModule,
-
-    new FastifyAdapter(),
-    { bufferLogs: true },
+    {
+      transport: Transport.GRPC,
+      options: {
+        package: 'user',
+        protoPath: join(__dirname, '../protos/user.proto'),
+      },
+    },
   );
 
   const configService = app.get<ConfigService>(ConfigService);
@@ -25,10 +26,6 @@ async function bootstrap() {
   });
   app.useGlobalPipes(new ValidationPipe());
 
-  app.setGlobalPrefix('/api');
-
-  app.useGlobalInterceptors(new ResponseInterceptor());
-
-  await app.listen(configService.get('PORT') || 3000);
+  await app.listen();
 }
 bootstrap();

@@ -10,33 +10,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Exchange {
-  id          Int          @id @default(autoincrement())
-  name        String       @unique
-  api_key     String
-  api_secret  String
-  withdrawals Withdrawal[]
-}
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
 
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-
-model Withdrawal {
-  id                 Int               @id @default(autoincrement())
-  amount             Decimal
-  user_id             Int
-  to_wallet_address String            @db.VarChar(42)
-  bank_suspend_id Int
-  currency           String
-  status             WithdrawalStatus @default(PENDING)
-  exchange           Exchange          @relation(fields: [exchange_id], references: [id])
-  exchange_id         Int               
-  network            String
-
-}
-
-enum WithdrawalStatus {
-  PENDING
-  COMPLETED
-  FAILED
-  CANCELED
+  @@map("users")
 }

@@ -5,7 +5,6 @@ import * as Joi from 'joi';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from './utils/exceptionFilter/allExceptionFilter';
 
-import { WithdrawalModule } from './withdrawal/withdrawal.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { HealthModule } from './health/health.module';
 import { environmentSchema } from './utils/types/config.type';
@@ -22,8 +21,6 @@ import { environmentSchema } from './utils/types/config.type';
         DATABASE_URI: Joi.string(),
       }),
     }),
-
-    WithdrawalModule,
 
     PrismaModule,
 
