@@ -6,6 +6,7 @@ import * as Sentry from '@sentry/node';
 export class RpcExceptionToHttpExceptionFilter extends BaseRpcExceptionFilter {
   catch(exception: RpcExceptionFilter, host: ArgumentsHost) {
     Sentry.captureException(exception);
+
     return super.catch(exception, host);
   }
 }

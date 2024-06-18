@@ -3,11 +3,12 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { APP_FILTER } from '@nestjs/core';
-import { AllExceptionsFilter } from './utils/exceptionFilter/allExceptionFilter';
 
 import { PrismaModule } from './prisma/prisma.module';
 import { HealthModule } from './health/health.module';
 import { environmentSchema } from './utils/types/config.type';
+import { AuthModule } from './auth/auth.module';
+import { RpcExceptionToHttpExceptionFilter } from './utils/exceptionFilter/rpcExceptionFilter';
 
 @Module({
   imports: [
@@ -25,13 +26,14 @@ import { environmentSchema } from './utils/types/config.type';
     PrismaModule,
 
     HealthModule,
+    AuthModule,
   ],
 
   providers: [
     ConfigService,
     {
       provide: APP_FILTER,
-      useClass: AllExceptionsFilter,
+      useClass: RpcExceptionToHttpExceptionFilter,
     },
   ],
 })

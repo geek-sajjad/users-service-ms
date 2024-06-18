@@ -1,4 +1,5 @@
 // import { withdrawalErrorObject } from '@/withdrawal/constants/withdrawal.error';
+import { AuthErrorObject } from '@/auth/constants/auth.error';
 import { HttpStatus } from '@nestjs/common';
 
 /**
@@ -26,5 +27,5 @@ export const generalErrorObject = {
  */
 export const errorObjectCollection = {
   ...generalErrorObject,
-  // ...withdrawalErrorObject,
+  ...AuthErrorObject,
 };
