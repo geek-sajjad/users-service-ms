@@ -8,7 +8,8 @@ import { PrismaModule } from './prisma/prisma.module';
 import { HealthModule } from './health/health.module';
 import { environmentSchema } from './utils/types/config.type';
 import { AuthModule } from './auth/auth.module';
-import { RpcExceptionToHttpExceptionFilter } from './utils/exceptionFilter/rpcExceptionFilter';
+import { TetherlandRpcExceptionFilter } from './utils/exceptionFilter/tetherland-rpc-exception.filter';
+import { AllExceptionFilter } from './utils/exceptionFilter/all-exception.filter';
 
 @Module({
   imports: [
@@ -29,11 +30,16 @@ import { RpcExceptionToHttpExceptionFilter } from './utils/exceptionFilter/rpcEx
     AuthModule,
   ],
 
+  // Note: The order of exception filters registered here is important
   providers: [
     ConfigService,
     {
       provide: APP_FILTER,
-      useClass: RpcExceptionToHttpExceptionFilter,
+      useClass: AllExceptionFilter,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: TetherlandRpcExceptionFilter,
     },
   ],
 })

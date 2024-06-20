@@ -10,8 +10,7 @@ import { resolve } from 'path';
 import * as fs from 'fs';
 import { UserRepository } from '@/user/user.repository';
 import * as bcrypt from 'bcrypt';
-import { RpcException } from '@nestjs/microservices';
-import { AuthErrorObject } from './constants/auth.error';
+import { TetherlandRpcException } from '@/utils/errorHandler/tetherland-rpc.exception';
 
 @Injectable()
 export class AuthService {
@@ -25,22 +24,15 @@ export class AuthService {
   ): Promise<IGenerateTokenResponse> {
     const user = await this.userRepository.findOneByEmail(requestDto.email);
 
-    if (!user) {
-      throw new RpcException(
-        AuthErrorObject.invalidLoginCredentials.description,
-      );
-    }
+    if (!user) throw new TetherlandRpcException('invalidLoginCredentials');
 
     const isPasswordCorrect = await bcrypt.compare(
       requestDto.password,
       user.password,
     );
 
-    if (!isPasswordCorrect) {
-      throw new RpcException(
-        AuthErrorObject.invalidLoginCredentials.description,
-      );
-    }
+    if (!isPasswordCorrect)
+      throw new TetherlandRpcException('invalidLoginCredentials');
 
     const accessToken = await this.jwtService.signAsync({
       sub: user.id,

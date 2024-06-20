@@ -1,6 +1,5 @@
-// import { withdrawalErrorObject } from '@/withdrawal/constants/withdrawal.error';
-import { AuthErrorObject } from '@/auth/constants/auth.error';
-import { HttpStatus } from '@nestjs/common';
+import { authErrorObject } from '@/auth/constants/auth.error';
+import { status } from '@grpc/grpc-js';
 
 /**
  * @constant
@@ -9,14 +8,9 @@ import { HttpStatus } from '@nestjs/common';
  */
 export const generalErrorObject = {
   unknown: {
-    description: 'خطای نا مشخصی رخ داده است.',
-    status: HttpStatus.BAD_REQUEST,
+    description: 'Internal Server Error',
+    status: status.UNKNOWN,
     type: 'unknown',
-  },
-  connectionError: {
-    description: 'ارتباط با سرور امکان پذیر نیست.',
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
-    type: 'connectionError',
   },
 };
 
@@ -27,5 +21,5 @@ export const generalErrorObject = {
  */
 export const errorObjectCollection = {
   ...generalErrorObject,
-  ...AuthErrorObject,
+  ...authErrorObject,
 };

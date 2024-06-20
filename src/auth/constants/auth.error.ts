@@ -1,6 +1,6 @@
 import { status } from '@grpc/grpc-js';
 
-export const AuthErrorObject = {
+export const authErrorObject = {
   invalidLoginCredentials: {
     description: 'email or password is not correct',
     status: status.UNAUTHENTICATED,
